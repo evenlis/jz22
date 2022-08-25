@@ -1,4 +1,5 @@
 from icalendar import Calendar, Event as CalEvent, vText
+from tzlocal import get_localzone
 from dateutil import parser
 from pytz import timezone
 import requests
@@ -6,6 +7,7 @@ import inquirer
 import json
 import os
 
+tz_name = get_localzone()
 
 class Event:
 
@@ -19,7 +21,13 @@ class Event:
         self.event_type = event_type
 
     def __str__(self):
-        return '{}->{} ({}, {}m): {} '.format(self.start_time.astimezone(timezone('Europe/Oslo')).strftime('%H:%M'), self.end_time.astimezone(timezone('Europe/Oslo')).strftime('%H:%M'), self.event_type, self.length, self.title)
+        return '{}->{} ({}, {}m): {} '.format(
+                self.start_time.astimezone(tz_name).strftime('%H:%M'),
+                self.end_time.astimezone(tz_name).strftime('%H:%M'),
+                self.event_type,
+                self.length,
+                self.title
+                )
 
 
 def parse_event(json):
@@ -59,6 +67,9 @@ if __name__ == '__main__':
                 'Select talks you want to include',
                 talks
             )
+
+    print('start times displayed in {} tz'.format(tz_name))
+
     answer = inquirer.prompt([prompt])
 
     cal = Calendar()
