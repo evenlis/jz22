@@ -47,8 +47,8 @@ def create_prompt(talk):
 def create_calendar_event(event_obj):
     cal_event = CalEvent()
     cal_event['summary'] =  event_obj.title
-    cal_event['dtstart'] =  event_obj.start_time
-    cal_event['dtend'] =  event_obj.end_time
+    cal_event['dtstart'] =  event_obj.start_time.strftime('%Y%m%dT%H%M%SZ')
+    cal_event['dtend'] =  event_obj.end_time.strftime('%Y%m%dT%H%M%SZ')
     cal_event['location'] = event_obj.room
     return cal_event
 
@@ -73,7 +73,6 @@ if __name__ == '__main__':
     answer = inquirer.prompt([prompt])
 
     cal = Calendar()
-    cal['summary'] = 'javazone talks 2022'
     cal_events = list(map(create_calendar_event, answer['include']))
 
     [cal.add_component(ev) for ev in cal_events]
