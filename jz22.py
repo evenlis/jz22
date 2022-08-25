@@ -1,5 +1,6 @@
 from icalendar import Calendar, Event as CalEvent, vText
 from dateutil import parser
+from pytz import timezone
 import requests
 import inquirer
 import json
@@ -18,7 +19,7 @@ class Event:
         self.event_type = event_type
 
     def __str__(self):
-        return '{}->{} ({}, {}m): {} '.format(self.start_time.strftime('%H:%M'), self.end_time.strftime('%H:%M'), self.event_type, self.length, self.title)
+        return '{}->{} ({}, {}m): {} '.format(self.start_time.astimezone(timezone('Europe/Oslo')).strftime('%H:%M'), self.end_time.astimezone(timezone('Europe/Oslo')).strftime('%H:%M'), self.event_type, self.length, self.title)
 
 
 def parse_event(json):
